@@ -3,6 +3,7 @@
 require('script.render.render')
 
 require('script.debug')
+require('script.common.color')
 require('script.math.math')
 require('script.math.vector')
 require('script.3d.math.vector3')
@@ -13,6 +14,10 @@ require('script.math.matrixs')
 require('script.math.RotationMatrix')
 require('script.math.CovarianceMatrix')
 require('script.math.JacobianMatrix2D')
+
+require('script.polygon.rect')
+require('script.polygon.line')
+require('script.polygon.circle')
 
 -- Load application
 require('script.application')

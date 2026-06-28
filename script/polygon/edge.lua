@@ -135,12 +135,6 @@ end
 
 function Edge2D:draw()
     -- local r, g, b, a = love.graphics.getColor( );
-    local minX = math.min(self.P1.x, self.P2.x)
-    local minY = math.min(self.P1.y, self.P2.y)
-    local maxX = math.max(self.P1.x, self.P2.x)
-    local maxY = math.max(self.P1.y, self.P2.y)
-    if RenderSet.IsBoundsOutOfScreen(minX, minY, maxX, maxY) then return end
-
     Render.RenderObject(self);
  
     -- love.graphics.setColor(r, g, b, a );

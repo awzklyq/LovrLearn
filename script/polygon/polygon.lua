@@ -1,38 +1,5 @@
 _G.Polygon = {}
 
--- Per-frame polygon batching (see CollectPolygonsMesh in
--- script/polygon/mesh.lua). Only polygons passing CollectPolygonsMesh.IsBatchable
--- are collected; anything else keeps the original immediate Render.RenderObject
--- path because Polygon has many optional structures (SVG paths, child shapes,
--- stroke paint, non-convex triangulations with per-triangle state ...) that
--- cannot be collapsed to a plain vertex list safely.
-Polygon._pendingPolygons = {}
-Polygon._snapshotPool = {}
-Polygon._collectMesh = nil
-
-local function _getPolygonCollectMesh()
-    if not Polygon._collectMesh then
-        Polygon._collectMesh = CollectPolygonsMesh.new()
-    end
-    return Polygon._collectMesh
-end
-
--- Acquire a snapshot that mimics the fields CollectPolygonsMesh.SetPolygons
--- reads: fill_paint (with r/g/b/a) and vertices (flat x/y array).
--- The vertices are transformed through the current love.graphics stack so
--- polygons drawn inside push/translate/rotate blocks land at the correct
--- world-space position when the batched mesh is flushed.
-local function _acquirePolygonSnapshot()
-    local pool = Polygon._snapshotPool
-    local n = #pool
-    if n > 0 then
-        local s = pool[n]
-        pool[n] = nil
-        return s
-    end
-    return { fill_paint = {}, vertices = {}, isConvex = true }
-end
-
 function Polygon.new(x ,y)
     local polygon = setmetatable({}, Polygon);
     -- polygon.mode1 = 'fill';
@@ -62,11 +29,6 @@ function Polygon.new(x ,y)
     -- polygon.revisexy = Vector.new() --TODO for triangles box2d position..
 
     --polygon.box2d
-
-    -- Live-object accounting (see object_count_probe.lua).
-    local _ocp = rawget(_G, "ObjectCountProbe")
-    if _ocp then _ocp.track("Polygon", polygon) end
-
     return polygon;
 end
 
@@ -190,41 +152,9 @@ end
 
 function Polygon:draw()
 
-    -- Honour the global per-primitive master switch
-    -- (Setting.renderPrimitives.polygon). rawget keeps this safe during
-    -- engine bootstrap when Setting may not be loaded yet.
-    local _S = rawget(_G, "Setting")
-    local _P = _S and _S.renderPrimitives
-    if _P and _P.polygon == false then return end
-
     -- local r, g, b, a = love.graphics.getColor( );
     -- love.graphics.setColor(self.color.r, self.color.g, self.color.b, self.color.a );
-    if BatchDraw and BatchDraw.IsEnabled()
-        and CollectPolygonsMesh and CollectPolygonsMesh.IsBatchable(self) then
-        -- Snapshot vertices with world-space coordinates. Polygons drawn
-        -- inside a love.graphics push/translate/rotate block store LOCAL
-        -- coordinates; without transformPoint the mesh would render them at
-        -- the wrong position after the transform stack is popped.
-        local snap = _acquirePolygonSnapshot()
-        local srcV = self.vertices
-        local dstV = snap.vertices
-        local nv = #srcV
-        for i = 1, nv, 2 do
-            local wx, wy = love.graphics.transformPoint(srcV[i], srcV[i + 1])
-            dstV[i]     = wx
-            dstV[i + 1] = wy
-        end
-        -- Trim any leftover vertices from a previous (larger) recycle.
-        for i = nv + 1, #dstV do dstV[i] = nil end
-        local sp = self.fill_paint
-        local dp = snap.fill_paint
-        dp.r = sp.r; dp.g = sp.g; dp.b = sp.b; dp.a = sp.a
-        snap.isConvex = self.isConvex
-        local list = Polygon._pendingPolygons
-        list[#list + 1] = snap
-    else
-        Render.RenderObject(self);
-    end
+    Render.RenderObject(self);
     -- love.graphics.setColor(r, g, b, a );
     -- -- Matrix.reset()
     -- if self.box2d then
@@ -234,35 +164,6 @@ function Polygon:draw()
         self.crossline:draw();
     end
     self.box:draw()
-end
-
--- Register the flush callback with BatchDraw. Runs while the game camera
--- transform is still active (see application.lua love.draw).
-if _G.BatchDraw and BatchDraw.RegisterFlush then
-    BatchDraw.RegisterFlush(function()
-        local list = Polygon._pendingPolygons
-        local n = #list
-        if n == 0 then return end
-
-        local prevR, prevG, prevB, prevA = love.graphics.getColor()
-        local prevBlend, prevAlphaMode = love.graphics.getBlendMode()
-        love.graphics.setColor(1, 1, 1, 1)
-        love.graphics.setBlendMode("alpha", "alphamultiply")
-
-        local mesh = _getPolygonCollectMesh()
-        mesh:SetPolygons(list)
-        mesh:draw()
-
-        love.graphics.setColor(prevR, prevG, prevB, prevA)
-        love.graphics.setBlendMode(prevBlend, prevAlphaMode)
-
-        -- Recycle snapshots.
-        local pool = Polygon._snapshotPool
-        for i = n, 1, -1 do
-            pool[#pool + 1] = list[i]
-            list[i] = nil
-        end
-    end)
 end
 
 function Polygon:createSVG(file, entity)

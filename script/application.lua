@@ -112,6 +112,7 @@ function lovr.update(dt)
 end
 
 function lovr.draw(Pass)
+    _G._SysPass = Pass
     -- \
     -- _G.UIHelper.update(dt);
     -- _G.app.update(dt);

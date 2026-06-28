@@ -34,7 +34,6 @@ function Box2D:getBoxValueFromObj()
 end
 
 function Box2D:draw()
-    if RenderSet.IsBoundsOutOfScreen(self.x1, self.y1, self.x2, self.y2) then return end
     if _G.lovedebug.showBox then
     Render.RenderObject(self)
     end

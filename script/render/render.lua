@@ -270,5 +270,15 @@ Render.getRenderIdName = function(id)
 end
 
 Render.RenderObject = function(obj)
-   
+    if obj == nil then
+        return
+    end
+
+    if obj.renderid == Render.RectId then
+        PassEx:DrawRect(_SysPass, obj.x, obj.y, obj.w, obj.h, obj.color, obj.thickness)
+    elseif obj.renderid == Render.CircleId then
+        PassEx:DrawCircle(_SysPass, obj.x, obj.y, obj.r, obj.color, obj.mode, obj.seg)
+    elseif obj.renderid == Render.LineId then
+        PassEx:DrawLine(_SysPass, obj.x1, obj.y1, obj.x2, obj.y2, obj.color, obj.lw)
+    end
 end

@@ -22,45 +22,6 @@ function CatmullRomCurve:GetPoint(InP0, InP1, InP2, InP3, t)
     return (InP1 * 2 + (InP2 - InP0) * t + ( InP0 * 2 - InP1 * 5 + InP2 * 4 - InP3) * t * t + (-InP0 + InP1 * 3 - InP2 * 3 + InP3) * t * t * t) * 0.5
 end
 
--- ========== LIGHTWEIGHT STATIC SAMPLING ==========
--- Sample a Catmull-Rom curve and return a flat array of Vector points.
--- This is a zero-allocation alternative to CatmullRomCurve.new() that does
--- NOT create any Line / Rect helper objects, which makes it suitable for
--- calling many times per frame (e.g. recomputing monster paths).
--- Parameters:
---   Points: array of Vector, at least 2 points
---   seg:    segments per span (defaults to 20)
--- Returns:
---   Array of Vector ( #result == (#Points - 1) * seg + 1 )
-function CatmullRomCurve.Sample(Points, seg)
-    seg = seg or 20
-    local result = {}
-    if not Points or #Points < 2 then return result end
-
-    -- Temporary helpers that mimic CatmullRomCurve:GetPoint without creating
-    -- an instance table.
-    local function getPoint(p0, p1, p2, p3, t)
-        return (p1 * 2 + (p2 - p0) * t + (p0 * 2 - p1 * 5 + p2 * 4 - p3) * t * t + (-p0 + p1 * 3 - p2 * 3 + p3) * t * t * t) * 0.5
-    end
-
-    -- First point of the curve == Points[1]
-    result[#result + 1] = Vector.new(Points[1].x, Points[1].y)
-
-    for i = 1, #Points - 1 do
-        local p0 = (i == 1) and Points[i] or Points[i - 1]
-        local p3 = (i == #Points - 1) and Points[i + 1] or Points[i + 2]
-        local p1 = Points[i]
-        local p2 = Points[i + 1]
-        for s = 1, seg do
-            local t = s / seg
-            local p = getPoint(p0, p1, p2, p3, t)
-            result[#result + 1] = p
-        end
-    end
-
-    return result
-end
-
 function CatmullRomCurve:GenerateDebugLines()
     self.DebugLines = {}
 

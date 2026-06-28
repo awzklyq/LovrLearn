@@ -16,28 +16,6 @@ function Polygon2D.CreateFromTriangles(InTriangles)
     return _p
 end
 
-function Polygon2D.GenerateFlowerData(petalCount, innerRadius, outerRadius, cx, cy)
-    petalCount = tonumber(petalCount) or 5
-    petalCount = math.max(petalCount, 3)
-    innerRadius = tonumber(innerRadius) or 10
-    outerRadius = tonumber(outerRadius) or 20
-
-    local _OriPosition = Point2D.new(cx or 0, cy or 0)
-    local midRadius = (innerRadius + outerRadius) / 2
-    local ampRadius = (outerRadius - innerRadius) / 2
-
-    local totalPoints = petalCount * 8
-    local _Points = {}
-
-    for i = 0, totalPoints - 1 do
-        local angle = (i / totalPoints) * 2 * math.pi
-        local r = midRadius + ampRadius * math.cos(petalCount * angle)
-        _Points[i + 1] = Point2D.new(_OriPosition.x + math.cos(angle) * r, _OriPosition.y + math.sin(angle) * r)
-    end
-
-    return Polygon2D.new(_Points)
-end
-
 function Polygon2D.GenerateCircleData(InPointNumber, InRange, InX, InY)
     InPointNumber = tonumber(InPointNumber) or 4
     InPointNumber = math.max(InPointNumber, 4)
@@ -143,7 +121,6 @@ function Polygon2D:SetPointsColor(...)
     end
 
     self._PointsColor:Set(...)
-    self.Color:Set(...)
 end
 
 function Polygon2D:SetEdgesColor(...)
@@ -152,7 +129,6 @@ function Polygon2D:SetEdgesColor(...)
     end
 
     self._EdgesColor:Set(...)
-    self.Color:Set(...)
 end
 
 function Polygon2D:ReGenerateEdges()
@@ -525,51 +501,4 @@ function Polygon2D:draw()
         end
         RenderSet.PopMatrix2D()
     end
-end
-
---- Generate a leaf-shaped polygon
---- @param width number  half-width of the leaf
---- @param height number half-height of the leaf (from center to tip)
---- @param cx number center x
---- @param cy number center y
---- @param rotation number optional rotation angle in radians (default 0)
---- @return Polygon2D
-function Polygon2D.GenerateLeafData(width, height, cx, cy, rotation)
-    width = tonumber(width) or 8
-    height = tonumber(height) or 16
-    cx = cx or 0
-    cy = cy or 0
-    rotation = rotation or 0
-
-    local _OriPosition = Point2D.new(cx, cy)
-    local totalPoints = 20
-    local _Points = {}
-
-    for i = 0, totalPoints - 1 do
-        local t = i / totalPoints
-        local angle = t * 2 * math.pi
-
-        -- Parametric leaf shape:
-        -- x = width * sin(angle) * (1 + 0.3 * cos(angle))
-        -- y = height * cos(angle)
-        -- This creates a pointed leaf with a sharper tip and rounded base
-        local lx = width * math.sin(angle) * (1 + 0.2 * math.cos(angle))
-        local ly = height * math.cos(angle)
-
-        -- Apply rotation
-        local rx, ry
-        if rotation ~= 0 then
-            local cosR = math.cos(rotation)
-            local sinR = math.sin(rotation)
-            rx = lx * cosR - ly * sinR
-            ry = lx * sinR + ly * cosR
-        else
-            rx = lx
-            ry = ly
-        end
-
-        _Points[i + 1] = Point2D.new(_OriPosition.x + rx, _OriPosition.y + ry)
-    end
-
-    return Polygon2D.new(_Points)
 end

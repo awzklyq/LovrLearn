@@ -290,12 +290,6 @@ end
 
 function Triangle2D:draw()
     -- local r, g, b, a = love.graphics.getColor( );
-    local minX = math.min(self.P1.x, self.P2.x, self.P3.x)
-    local minY = math.min(self.P1.y, self.P2.y, self.P3.y)
-    local maxX = math.max(self.P1.x, self.P2.x, self.P3.x)
-    local maxY = math.max(self.P1.y, self.P2.y, self.P3.y)
-    if RenderSet.IsBoundsOutOfScreen(minX, minY, maxX, maxY) then return end
-
     Render.RenderObject(self);
     -- love.graphics.setColor(r, g, b, a );
 

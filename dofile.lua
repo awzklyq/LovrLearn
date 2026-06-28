@@ -21,3 +21,8 @@ require('script.3d.render.renderset')
 
 -- Load camera
 require('script.3d.camera.camera3d')
+
+require('script.render.Pass')
+
+require('script.render.image')
+require('script.render.Texture')

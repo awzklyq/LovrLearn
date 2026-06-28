@@ -101,8 +101,8 @@ app.resizeWindow(function(w, h)
 end)
 
 
-RenderSet.screenwidth = lovr.system.getWindowWidth()
-RenderSet.screenheight = lovr.system.getWindowHeight()
+RenderSet.ScreenWidth = lovr.system.getWindowWidth()
+RenderSet.ScreenHeight = lovr.system.getWindowHeight()
 RenderSet.EnableScreenCull = true
 
 -- ---------------------------------------------------------------------------
@@ -178,8 +178,8 @@ RenderSet.IsBoundsOutOfScreen = function(minX, minY, maxX, maxY)
     local sMaxY = y1; if y2 > sMaxY then sMaxY = y2 end
     if y3 > sMaxY then sMaxY = y3 end
     if y4 > sMaxY then sMaxY = y4 end
-    local sw = RenderSet.screenwidth
-    local sh = RenderSet.screenheight
+    local sw = RenderSet.ScreenWidth
+    local sh = RenderSet.ScreenHeight
     local outside = sMaxX < 0 or sMinX > sw or sMaxY < 0 or sMinY > sh
     if outside then
         RenderSet.CulledCount = RenderSet.CulledCount + 1

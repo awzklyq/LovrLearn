@@ -144,6 +144,8 @@ Render.JacobianMatrix2DId = 72
 
 Render.EllipseId = 73
 
+Render.TextureId = 74
+
 Render.getRenderIdName = function(id)
     if type(id) == "table" then
         id = id.renderid
@@ -260,6 +262,8 @@ Render.getRenderIdName = function(id)
         return "JacobianMatrix2D"
     elseif Render.EllipseId == id then
         return "Ellipse"
+    elseif Render.TextureId == id then
+        return "Texture"
     end
     
     return "Null"

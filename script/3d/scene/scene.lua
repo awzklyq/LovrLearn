@@ -146,9 +146,9 @@ end
 function Scene3D:update(e)
     VelocityBuffNode.InitDynamicMeshs()
 
-    if self.screenwidth ~= RenderSet.screenwidth or self.screenheight ~= RenderSet.screenheight then
-        self.screenwidth = RenderSet.screenwidth-- lovr.system.getWindowWidth() * 2
-        self.screenheight = RenderSet.screenheight--lovr.system.getWindowHeight() * 2
+    if self.screenwidth ~= RenderSet.ScreenWidth or self.screenheight ~= RenderSet.ScreenHeight then
+        self.screenwidth = RenderSet.ScreenWidth-- lovr.system.getWindowWidth() * 2
+        self.screenheight = RenderSet.ScreenHeight--lovr.system.getWindowHeight() * 2
         self:reseizeScreen(self.screenwidth, self.screenheight)
     end
 

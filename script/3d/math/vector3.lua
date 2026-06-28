@@ -301,7 +301,15 @@ function Vector3:Log(sss)
     log(self.x, self.y, self.z)
 end
 
+local _Obj = vector(0,0,0)
 
+function Vector3:GetObject()
+    _Obj.x = self.x
+    _Obj.y = self.y
+    _Obj.z = self.z
+
+    return _Obj
+end
 
 Vector3.cOrigin = Vector3.new(0, 0, 0)
 Vector3.ZAxis = Vector3.new(0, 0, 1)

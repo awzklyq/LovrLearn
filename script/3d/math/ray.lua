@@ -15,8 +15,8 @@ function Ray.new(orig, dir)
 end
 
 function Ray.BuildFromScreen(x, y)
-	local xx = 2.0 * x / RenderSet.screenwidth - 1.0-- / RenderSet.screenwidth + 0.5
-	local yy =  1.0 - 2.0 * y / RenderSet.screenheight-- / RenderSet.screenheight + 0.5
+	local xx = 2.0 * x / RenderSet.ScreenWidth - 1.0-- / RenderSet.ScreenWidth + 0.5
+	local yy =  1.0 - 2.0 * y / RenderSet.ScreenHeight-- / RenderSet.ScreenHeight + 0.5
 	return Ray.BuildFromViewTransform(xx, yy,  RenderSet.getUseViewMatrix(), RenderSet.getUseProjectMatrix())
 end
 

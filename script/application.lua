@@ -91,8 +91,8 @@ function lovr.update(dt)
         screenwidth = w;
         screenheight = h;
         if RenderSet then
-            RenderSet.screenwidth =  screenwidth
-            RenderSet.screenheight = screenheight
+            RenderSet.ScreenWidth =  screenwidth
+            RenderSet.ScreenHeight = screenheight
         end
 
         
@@ -115,10 +115,10 @@ function lovr.draw(Pass)
     -- \
     -- _G.UIHelper.update(dt);
     -- _G.app.update(dt);
-    _G.app.beforrender();
+    _G.app.beforrender(Pass);
 
-    _G.app.render();
-    _G.app.afterrender();
+    _G.app.render(Pass);
+    _G.app.afterrender(Pass);
 end
 
 function lovr.mousepressed(x, y, button, istouch)
@@ -148,7 +148,6 @@ function lovr.mousepressed(x, y, button, istouch)
  end
 
  function lovr.load()
-    love.window.setMode( 1024,960 )
     _G.app.load();
 
     -- love.window.setMode(800, 600, {resizable=true, vsync=false, minwidth=400, minheight=300})

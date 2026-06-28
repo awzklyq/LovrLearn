@@ -140,6 +140,26 @@ function PassEx:DrawLine(InPass, InX1, InY1, InX2, InY2, InColor, InThickness)
     InPass:pop('state')
 end
 
+function PassEx:DrawText(InPass, InText, InX, InY, InScale, InColor, InWrap, InHAlign, InVAlign, InFont)
+    InPass:push('state')
+    InPass:push('transform')
+    InPass:origin()
+    InPass:setViewPose(1, mat4():identity())
+    InPass:setProjection('orthographic')
+    InPass:setDepthTest()
+
+    if InFont then
+        InPass:setFont(InFont)
+    end
+
+    InPass:setColor(InColor._r, InColor._g, InColor._b, InColor._a)
+    -- InPass:text(string, x, y, z, scale, angle, ax, ay, az, wrap, halign, valign)
+    InPass:text(InText or "", InX or 0, InY or 0, 0, InScale or 1, 0, 0, 1, 0, InWrap or 0, InHAlign or 'center', InVAlign or 'middle')
+
+    InPass:pop('transform')
+    InPass:pop('state')
+end
+
 app.load(function()
     _G._Pass = PassEx.new()
 

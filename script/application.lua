@@ -39,9 +39,9 @@ _G.app.resizeWindow = setmetatable({},  metatab)
 
 function lovr.mousereleased(x, y, button, isTouch)
   --  _G.UIHelper.mouseUp(x, y, button, isTouch)    
-    -- if UI.UISystem.mousereleased(button, x, y) == false then
+    if UI.UISystem.mousereleased(button, x, y) == false then
         _G.app.mousereleased(x, y, button, isTouch)
-    -- end
+    end
 end
 
 function lovr.keypressed(key, scancode, isrepeat)
@@ -128,9 +128,9 @@ function lovr.mousepressed(x, y, button, istouch)
     --    printy = y
     -- end
     --_G.UIHelper.mouseDown(x, y, button, isTouch)
-    -- if UI.UISystem.mouseDown(button, x, y) == false then
+    if UI.UISystem.mouseDown(button, x, y) == false then
         _G.app.mousepressed(x, y, button, istouch);
-    -- end
+    end
  end
 
  function lovr.mousemoved(x, y, dx, dy, istouch)
@@ -142,9 +142,9 @@ function lovr.mousepressed(x, y, button, istouch)
     --_G.UIHelper.mousemoved(x, y, dx, dy);
     local HasY = not not y
     if y then
-        -- if UI.UISystem.mousemoved(x, y) == false then
+        if UI.UISystem.mousemoved(x, y) == false then
             _G.app.mousemoved(x, y, dx, dy, istouch);
-        -- end
+        end
     end
  end
 

@@ -17,7 +17,7 @@ function UIText.new( text, x, y, w, h )
 
 	uitext.color  = LColor.new(180, 180, 180);
 
-	uitext.obj = love.graphics.newText( love.graphics.getFont(), uitext._text )
+	-- uitext.obj = love.graphics.newText( love.graphics.getFont(), uitext._text )
 
 	uitext.renderid = Render.UITextId;
 
@@ -61,16 +61,18 @@ function UIText:get__text()
 end
 
 function UIText:get__ow()
-	return self.obj:getWidth()
+	-- return self.obj:getWidth()
+	return self._w
 end
 
 function UIText:get__oh()
-	return self.obj:getHeight()
+	-- return self.obj:getHeight()
+	return self._h
 end
 
 function UIText:set__text(text)
 	self._text = text
-	self.obj:set(text)
+	-- self.obj:set(text)
 end
 
 

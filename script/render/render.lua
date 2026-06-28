@@ -146,6 +146,8 @@ Render.EllipseId = 73
 
 Render.TextureId = 74
 
+Render.TextId = 75
+
 Render.getRenderIdName = function(id)
     if type(id) == "table" then
         id = id.renderid
@@ -264,6 +266,8 @@ Render.getRenderIdName = function(id)
         return "Ellipse"
     elseif Render.TextureId == id then
         return "Texture"
+    elseif Render.TextId == id then
+        return "Text"
     end
     
     return "Null"
@@ -280,5 +284,7 @@ Render.RenderObject = function(obj)
         PassEx:DrawCircle(_SysPass, obj.x, obj.y, obj.r, obj.color, obj.mode, obj.seg)
     elseif obj.renderid == Render.LineId then
         PassEx:DrawLine(_SysPass, obj.x1, obj.y1, obj.x2, obj.y2, obj.color, obj.lw)
+    elseif obj.renderid == Render.TextId then
+        PassEx:DrawText(_SysPass, obj.text, obj.x, obj.y, obj.scale, obj.color, obj.wrap, obj.halign, obj.valign, obj.font)
     end
 end

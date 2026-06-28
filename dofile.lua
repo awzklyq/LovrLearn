@@ -15,12 +15,13 @@ require('script.math.RotationMatrix')
 require('script.math.CovarianceMatrix')
 require('script.math.JacobianMatrix2D')
 
+-- Load application
+require('script.application')
+
 require('script.polygon.rect')
 require('script.polygon.line')
 require('script.polygon.circle')
-
--- Load application
-require('script.application')
+require('script.polygon.polygonevent')
 
 require('script.3d.render.renderset')
 
@@ -31,3 +32,17 @@ require('script.render.Pass')
 
 require('script.render.image')
 require('script.render.Texture')
+
+-- Load file
+require('script.common.filepath')
+require('script.file.file')
+
+-- Load uisystem
+require('script.uisystem.uisystem')
+-- require('script.uisystem.text')
+-- require('script.uisystem.button')
+-- require('script.uisystem.checkbox')
+-- require('script.uisystem.scrollbar')
+-- require('script.uisystem.ComboBox')
+-- require('script.uisystem.ColorPlane')
+-- require('script.uisystem.CurveDataPlane')
